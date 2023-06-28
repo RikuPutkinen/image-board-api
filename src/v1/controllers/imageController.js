@@ -1,15 +1,14 @@
 const imageService = require('../services/imageService');
 
 async function getAllImages(req, res) {
-  res.json({
-    message: "get all images"
-  })
+  const images = await imageService.getAllImages();
+  res.status(200).json(images);
 }
 
 async function getImage(req, res) {
-  res.json({
-    message: "get one image"
-  })
+  const { imageId } = req.params;
+  const image = await imageService.getImage(imageId);
+  res.status(200).json(image);
 }
 
 async function createImage(req, res) {
@@ -18,7 +17,6 @@ async function createImage(req, res) {
   const tags = req.body.tags;
 
   await imageService.createImage(filePath, uuid, tags);
-  console.log('Controller res');
   res.status(201).location(uuid).end();
 }
 

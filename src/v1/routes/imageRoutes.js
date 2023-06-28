@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
 const upload = require('../utils/imageUpload');
 const createThumbnail = require('../utils/createThumbnail');
-
 const imageController = require('../controllers/imageController')
 
 router.get('/', imageController.getAllImages);

@@ -1,5 +1,6 @@
 const imageUtils = require('../../../db/utils/imageUtils');
 const imageTagUtils = require('../../../db/utils/imageTagUtils');
+const path = require('path');
 
 async function getAllImages() {
   const images = await imageUtils.getAllImages();
@@ -8,7 +9,14 @@ async function getAllImages() {
 
 async function getImage(id) {
   const image = await imageUtils.getImage(id);
-  return image;
+  const imageDir = path.dirname(image.filepath);
+  const fileName = path.basename(image.filepath);
+  const thumbnailURL = path.join(imageDir, `thumbnail_${fileName}`);
+  
+  return {
+    ...image,
+    thumbnailURL
+  };
 }
 
 async function createImage(filepath, uuid, tags) {
