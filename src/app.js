@@ -7,8 +7,8 @@ setupDb();
 const app = express();
 const PORT = process.env.SERVER_PORT || 9000;
 
+app.use('/uploads', express.static('../public/data/uploads'));
 app.use('/api/v1', v1Router);
-app.get('/', (req, res) => res.json({message: 'GET index'}))
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`)
