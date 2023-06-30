@@ -9,14 +9,7 @@ async function getAllImages() {
 
 async function getImage(id) {
   const image = await imageUtils.getImage(id);
-  const imageDir = path.dirname(image.filepath);
-  const fileName = path.basename(image.filepath);
-  const thumbnailURL = path.join(imageDir, `thumbnail_${fileName}`);
-  
-  return {
-    ...image,
-    thumbnailURL
-  };
+  return image;
 }
 
 async function createImage(filepath, uuid, tags) {
