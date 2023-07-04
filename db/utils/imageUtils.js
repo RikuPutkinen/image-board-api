@@ -19,14 +19,14 @@ async function deleteImageFromDatabase(image_id) {
 async function getImage(image_id) {
   const image = await Image.query().findById(image_id);
   const tagNames = await getTagsForImage(image_id);
+  console.log(tagNames);
 
   return { ...image, tagNames };
 }
 
 async function getTagsForImage(image_id) {
   const image = await Image.query().findById(image_id);
-  const tags = await image.
-    $relatedQuery('tags');
+  const tags = await image.$relatedQuery('tags');
   
   const tagNames = tags.map(tag => tag.tag_name);
   return tagNames;

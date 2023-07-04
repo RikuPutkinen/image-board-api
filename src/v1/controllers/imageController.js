@@ -40,13 +40,14 @@ async function getAllImages(req, res) {
 async function getImage(req, res) {
   const { imageId } = req.params;
   const image = await imageService.getImage(imageId);
-  const { image_id, created_at, filepath } = image;
+  const { image_id, created_at, filepath, tagNames } = image;
   const imageURL = filepathToURL(req, filepath);
 
   const imageData = {
     image_id,
     created_at,
-    imageURL
+    imageURL,
+    tagNames
   };
 
   res.status(200).json(imageData);
