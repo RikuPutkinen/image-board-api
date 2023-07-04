@@ -2,10 +2,11 @@ const Tag = require('../models/tag');
 const crypto = require('crypto');
 
 async function createTag(tag_name) {
+  const tag_name_lower = tag_name.toLowerCase();
   const tag_id = crypto.randomUUID();
   const tag = {
     tag_id,
-    tag_name
+    tag_name: tag_name_lower
   };
   await Tag.query().insert(tag);
 
