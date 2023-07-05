@@ -6,6 +6,8 @@ module.exports = async function(req, res, next) {
   const filePath = req.file.path;
   
   await sharp(filePath)
+    // Make sure the image keeps the original orientation
+    .rotate()
     .resize(300, 300, {
       fit: 'inside',
     })
