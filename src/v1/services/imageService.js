@@ -2,28 +2,53 @@ const imageUtils = require('../../../db/utils/imageUtils');
 const imageTagUtils = require('../../../db/utils/imageTagUtils');
 const path = require('path');
 
-async function getAllImages() {
-  const images = await imageUtils.getAllImages();
-  return images;
+function routeToURL(req, route) {
+  const protocol = req.protocol;
+  const host = req.get('host');
+  const URL = `${protocol}://${host}${route}`;
+  return URL;
 }
 
-async function getImage(id) {
+function createImageDataObject(req, image) {
+  const imageData = {
+    imageId: image.image_id,
+    createdAt: image.created_at,
+    tags: image.tags
+  };
+  imageData.imageRoute = routeToURL(req, image.image_route());
+  imageData.thumbnailRoute = routeToURL(req, image.thumbnail_route());
+  return imageData;
+}
+
+async function getAllImages(req) {
+  const images = await imageUtils.getAllImages();
+  const imageArr = images.map(image => {
+    return createImageDataObject(req, image);
+  })
+
+  return imageArr;
+}
+
+async function getImage(req, id) {
   const image = await imageUtils.getImage(id);
-  return image;
+  const imageData = createImageDataObject(req, image);
+  return imageData;
 }
 
 async function createImage(filepath, uuid, tags) {
-  await imageUtils.addImageToDatabase(filepath, uuid);
-
+  const image = await imageUtils.addImageToDatabase(filepath, uuid);
+  image.tags = [];
+  
   // Add tags
   if (tags) {
     const tagArr = tags.split(' ');
     tagArr.forEach(async tag => {
-      await imageTagUtils.addTagToImage(uuid, tag);
+      const tagData = await imageTagUtils.addTagToImage(uuid, tag);
+      image.tags.push(tagData);
     });
   }
 
-  return uuid;
+  return image;
 }
 
 async function deleteImage(req, res) {
