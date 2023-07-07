@@ -1,9 +1,26 @@
 const { Model } = require('objection');
+const path = require('path');
 
 class Image extends Model {
   static tableName = 'image';
 
   static idColumn = 'image_id';
+
+  static get virtualAttributes() {
+    return ['image_route', 'thumbnail_route'];
+  }
+
+  image_route() {
+    return this.filepath.match(/\/uploads.*/)[0];
+  }
+
+  thumbnail_route() {
+    let route = this.filepath.match(/\/uploads.*/)[0];
+    const dir = path.dirname(route);
+    const filename = path.basename(route);
+
+    return path.join(dir, `thumbnail_${filename}`);
+  }
 
   static get jsonSchema() {
     return {
