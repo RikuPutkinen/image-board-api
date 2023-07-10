@@ -1,20 +1,24 @@
-const { Model } = require('objection');
+const { Model, snakeCaseMappers } = require('objection');
 const path = require('path');
 
 class Image extends Model {
+  static get columnNameMappers() {
+    return snakeCaseMappers();
+  }
+  
   static tableName = 'image';
 
   static idColumn = 'image_id';
 
   static get virtualAttributes() {
-    return ['image_route', 'thumbnail_route'];
+    return ['imageRoute', 'thumbnailRoute'];
   }
 
-  image_route() {
+  imageRoute() {
     return this.filepath.match(/\/uploads.*/)[0];
   }
 
-  thumbnail_route() {
+  thumbnailRoute() {
     let route = this.filepath.match(/\/uploads.*/)[0];
     const dir = path.dirname(route);
     const filename = path.basename(route);

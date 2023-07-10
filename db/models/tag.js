@@ -1,6 +1,10 @@
-const { Model } = require('objection');
+const { Model, snakeCaseMappers } = require('objection');
 
 class Tag extends Model {
+  static get columnNameMappers() {
+    return snakeCaseMappers();
+  }
+  
   static tableName = 'tag';
 
   static idColumn = 'tag_id';

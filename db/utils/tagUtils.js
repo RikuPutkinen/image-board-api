@@ -1,30 +1,34 @@
 const Tag = require('../models/tag');
 const crypto = require('crypto');
+const imageUtils = require('./imageUtils');
 
-async function createTag(tag_name) {
-  const tag_name_lower = tag_name.toLowerCase();
-  const tag_id = crypto.randomUUID();
+async function createTag(tagName) {
+  const tagNameLower = tagName.toLowerCase();
+  const tagId = crypto.randomUUID();
   const tag = {
-    tag_id,
-    tag_name: tag_name_lower
+    tagId,
+    tagName: tagNameLower
   };
   await Tag.query().insert(tag);
 
-  console.log(`Created tag ${tag_id} with name ${tag_name}`)
+  console.log(`Created tag ${tagId} with name ${tagNameLower}`)
   return tag;
 }
 
 async function getTag(tag_id) {
-
+  const tag = await Tag.query().findById(tag_id);
+  const images = await tag.$relatedQuery('images');
+  return { ...tag, images };
 }
 
 async function getTagByName(tag_name) {
-  let tag = await Tag.query().findOne({ tag_name });
+  const tag = await Tag.query().findOne({ tag_name });
   return tag;
 }
 
 async function getAllTags() {
-  
+  const tags = await Tag.query();
+  return tags;
 }
 
 async function deleteTag(tag_id) {
@@ -37,5 +41,7 @@ async function updateTag(tag_id, opts) {
 
 module.exports = {
   createTag,
-  getTagByName
+  getTagByName,
+  getAllTags,
+  getTag
 }

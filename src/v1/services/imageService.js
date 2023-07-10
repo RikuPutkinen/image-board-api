@@ -11,12 +11,12 @@ function routeToURL(req, route) {
 
 function createImageDataObject(req, image) {
   const imageData = {
-    imageId: image.image_id,
-    createdAt: image.created_at,
+    imageId: image.imageId,
+    createdAt: image.createdAt,
     tags: image.tags
   };
-  imageData.imageRoute = routeToURL(req, image.image_route());
-  imageData.thumbnailRoute = routeToURL(req, image.thumbnail_route());
+  imageData.imageRoute = routeToURL(req, image.imageRoute());
+  imageData.thumbnailRoute = routeToURL(req, image.thumbnailRoute());
   return imageData;
 }
 

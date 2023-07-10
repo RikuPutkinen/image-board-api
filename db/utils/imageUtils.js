@@ -3,7 +3,7 @@ const Image = require('../models/image');
 async function addImageToDatabase(filepath, uuid) {
   const image = await Image.query().insert({
     filepath: filepath,
-    image_id: uuid
+    imageId: uuid
   })
 
   console.log(`Uploaded image ${uuid} to database`);
