@@ -7,23 +7,29 @@ class Image extends Model {
   }
   
   static tableName = 'image';
-
+  
   static idColumn = 'image_id';
-
+  
   static get virtualAttributes() {
     return ['imageRoute', 'thumbnailRoute'];
   }
-
+  
   imageRoute() {
     return this.filepath.match(/\/uploads.*/)[0];
   }
-
+  
   thumbnailRoute() {
     let route = this.filepath.match(/\/uploads.*/)[0];
     const dir = path.dirname(route);
     const filename = path.basename(route);
-
+    
     return path.join(dir, `thumbnail_${filename}`);
+  }
+  
+  $formatJson(json) {
+    json = super.$formatJson(json);
+    delete json.filepath;
+    return json;
   }
 
   static get jsonSchema() {
@@ -37,6 +43,7 @@ class Image extends Model {
       }
     }
   }
+
 
   static get relationMappings() {
     const Tag = require('./tag');
