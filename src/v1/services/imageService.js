@@ -1,24 +1,6 @@
 const imageUtils = require('../../../db/utils/imageUtils');
 const imageTagUtils = require('../../../db/utils/imageTagUtils');
-const path = require('path');
-
-function routeToURL(req, route) {
-  const protocol = req.protocol;
-  const host = req.get('host');
-  const URL = `${protocol}://${host}${route}`;
-  return URL;
-}
-
-function createImageDataObject(req, image) {
-  const imageData = {
-    imageId: image.imageId,
-    createdAt: image.createdAt,
-    tags: image.tags
-  };
-  imageData.imageRoute = routeToURL(req, image.imageRoute());
-  imageData.thumbnailRoute = routeToURL(req, image.thumbnailRoute());
-  return imageData;
-}
+const createImageDataObject = require('../utils/createImageDataObject');
 
 async function getAllImages(req) {
   const images = await imageUtils.getAllImages();
