@@ -16,9 +16,10 @@ async function createTag(tagName) {
 }
 
 async function getTag(tag_id) {
-  const tag = await Tag.query().findById(tag_id);
-  const images = await tag.$relatedQuery('images');
-  return { ...tag, images };
+  const tag = await Tag.query()
+    .findById(tag_id)
+    .withGraphFetched('images');
+  return tag;
 }
 
 async function getTagByName(tag_name) {
@@ -27,7 +28,8 @@ async function getTagByName(tag_name) {
 }
 
 async function getAllTags() {
-  const tags = await Tag.query();
+  const tags = await Tag.query()
+    .withGraphFetched('images');
   return tags;
 }
 
